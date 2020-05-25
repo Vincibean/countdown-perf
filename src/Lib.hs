@@ -24,10 +24,10 @@ apply Div x y = x `div` y
 -- Decide if the result of applying an operator to two positive
 -- natural numbers is another such:
 valid :: Op -> Int -> Int -> Bool
-valid Add x y = True
+valid Add x y = x <= y
 valid Sub x y = x > y
-valid Mul x y = True
-valid Div x y = x `mod` y == 0
+valid Mul x y = x <= y && x /= 1 && y /= 1
+valid Div x y = x `mod` y == 0 && y /= 1
 
 -- Return the overall value of an expression, provided that it is
 -- a positive natural number
