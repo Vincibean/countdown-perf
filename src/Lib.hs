@@ -2,16 +2,17 @@ module Lib
     ( choices
     , split
     , solutions
+    , solutions'
     ) where
-
-someFunc :: IO ()
-someFunc = putStrLn "someFunc"
 
 data Op = Add | Sub | Mul | Div
   deriving Show
 
 data Expr = Val Int | App Op Expr Expr
   deriving Show
+
+-- Valid expressions and their values
+type Result = (Expr, Int)
 
 -- Apply an operator
 apply :: Op -> Int -> Int -> Int
@@ -52,12 +53,12 @@ interleave x (y:ys) = (x:y:ys) : map (y:) (interleave x ys)
 subs :: [a] -> [[a]]
 subs []     = [[]]
 subs (x:xs) = yss ++ map (x:) yss
-               where 
+               where
                 yss = subs xs
 
 -- Return a list of all the values in an expression
 values :: Expr -> [Int]
-values (Val n) = [n]
+values (Val n)      = [n]
 values (App op l r) = values l ++ values r
 
 -- Decide if a solution is a given solution for a given list of
@@ -91,3 +92,26 @@ solutions :: [Int] -> Int -> [Expr]
 solutions ns n = [e | ns' <- choices ns
                     , e <- exprs ns'
                     , eval e == [n]]
+
+-- We seek to define a function that fuses together the
+-- generation and evaluation of expressions
+results :: [Int] -> [Result]
+results [] = []
+results [n] = [(Val n, n) | n > 0]
+results ns =
+    [res | (ls, rs) <- split ns
+         , lx <- results ls
+         , ry <- results rs
+         , res <- combine' lx ry]
+
+combine' :: Result -> Result -> [Result]
+combine' (l, x) (r, y) =
+    [(App o l r, apply o x y)
+      | o <- [Add, Sub, Mul, Div]
+      , valid o x y]
+
+solutions' :: [Int] -> Int -> [Expr]
+solutions' ns n =
+    [e | ns' <- choices ns
+       , (e, m) <- results ns'
+       , m == n]
