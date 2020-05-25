@@ -1,13 +1,17 @@
 module Lib
-    ( someFunc
+    ( choices
+    , split
+    , solutions
     ) where
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
 
 data Op = Add | Sub | Mul | Div
+  deriving Show
 
 data Expr = Val Int | App Op Expr Expr
+  deriving Show
 
 -- Apply an operator
 apply :: Op -> Int -> Int -> Int
@@ -34,11 +38,22 @@ eval (App o l r) = [apply o x y | x <- eval l
 
 -- Return a list of all possible ways of choosing zero or more
 -- elements from a list
--- For example:
--- choices [1, 2]
--- [[], [1], [2], [1, 2], [2, 1]]
 choices :: [a] -> [[a]]
-choices = undefined
+choices xs = [zs | ys <- subs xs,zs <- perms ys]
+
+perms :: [a] -> [[a]]
+perms []     = [[]]
+perms (x:xs) = concat $ map (interleave x) (perms xs)
+
+interleave :: a -> [a] -> [[a]]
+interleave x []     = [[x]]
+interleave x (y:ys) = (x:y:ys) : map (y:) (interleave x ys)
+
+subs :: [a] -> [[a]]
+subs []     = [[]]
+subs (x:xs) = yss ++ map (x:) yss
+               where 
+                yss = subs xs
 
 -- Return a list of all the values in an expression
 values :: Expr -> [Int]
@@ -53,11 +68,8 @@ solution e ns n = elem (values e) (choices ns)
 
 -- Return a list of all possible ways of splitting a list into two
 -- non-empty parts
--- For example:
--- split [1, 2, 3, 4]
--- [([1], [2, 3, 4]), ([1, 2], [3, 4]), ([1, 2, 3], [4])]
 split :: [a] -> [([a], [a])]
-split = undefined
+split as = (flip splitAt as) <$> [1..length as - 1]
 
 -- Return a list of all possible expressions whose values are
 -- precisely a given list of numbers
@@ -79,5 +91,3 @@ solutions :: [Int] -> Int -> [Expr]
 solutions ns n = [e | ns' <- choices ns
                     , e <- exprs ns'
                     , eval e == [n]]
-
--- solutions [1, 3, 7, 10, 25, 50] 765

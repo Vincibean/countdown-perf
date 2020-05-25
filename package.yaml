@@ -46,3 +46,5 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - countdown-perf
+    - hspec
+    - QuickCheck
