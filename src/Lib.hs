@@ -6,10 +6,18 @@ module Lib
     ) where
 
 data Op = Add | Sub | Mul | Div
-  deriving Show
+
+instance Show Op where
+  show Add = "+"
+  show Sub = "-"
+  show Mul = "*"
+  show Div = "/"
 
 data Expr = Val Int | App Op Expr Expr
-  deriving Show
+
+instance Show Expr where
+  show (Val i) = show i
+  show (App op l r) = "(" <> show l <> " " <> show op <> " " <> show r <> ")"
 
 -- Valid expressions and their values
 type Result = (Expr, Int)
