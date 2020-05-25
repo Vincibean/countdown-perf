@@ -4,26 +4,25 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1d045b76aa28a0ef948b8883263b6a442b0f1d517e9fb92a7c4899d60ab1edb5
+-- hash: a800e74c71f2b9b0ef3ac94e3a32e9c43d03f8a616721deb242155ddbb05f55f
 
 name:           countdown-perf
 version:        0.1.0.0
 description:    Please see the README on GitHub at <https://github.com/githubuser/countdown-perf#readme>
-homepage:       https://github.com/githubuser/countdown-perf#readme
-bug-reports:    https://github.com/githubuser/countdown-perf/issues
-author:         Author name here
-maintainer:     example@example.com
-copyright:      2020 Author name here
-license:        BSD3
+homepage:       https://github.com/Vincibean/countdown-perf#readme
+bug-reports:    https://github.com/Vincibean/countdown-perf/issues
+author:         Vincibean
+maintainer:     andrebessi00@gmail.com
+copyright:      2020 Vincibean
+license:        GPL-3.0
 license-file:   LICENSE
 build-type:     Simple
 extra-source-files:
     README.md
-    ChangeLog.md
 
 source-repository head
   type: git
-  location: https://github.com/githubuser/countdown-perf
+  location: https://github.com/Vincibean/countdown-perf
 
 library
   exposed-modules:
